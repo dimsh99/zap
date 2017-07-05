@@ -18,3 +18,5 @@ source_url 'https://github.com/nvwls/zap' if respond_to?(:source_url)
 issues_url 'https://github.com/nvwls/zap/issues' if respond_to?(:issues_url)
 
 chef_version '>= 12.1' if respond_to?(:chef_version)
+
+depends 'hostsfile'
