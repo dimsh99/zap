@@ -21,28 +21,34 @@
 
 require 'etc'
 require_relative 'default.rb'
-require 'manipulator.rb'
 
+class Chef
+  class Resource
+    class HostsfileEntry
+      resource_name :hostsfile_entry if respond_to?(:resource_name)
+    end
+  end
+end
 # zap_hostsfile_entry '/etc/hosts'
 class Chef
   # resource
-  class Resource::ZapHostsEntry < Resource::Zap
+  class Resource::ZapHostsfileEntry < Resource::Zap
     def initialize(name, run_context = nil)
       super
 
       # Set the resource name and provider and default action
       @action = :remove
-      @resource_name = :zap_hosts_entry
+      @resource_name = :zap_hostsfile_entry
       @supports << :filter
-      @provider = Provider::ZapHostsEntry
-      @klass = [Chef::Resource::HostsFileEntry]
+      @provider = Provider::ZapHostsfileEntry
+      @klass = [Chef::Resource::HostsfileEntry]
     end
   end
 
   # provider
-  class Provider::ZapHostsEntry < Provider::Zap
+  class Provider::ZapHostsfileEntry < Provider::Zap
     def collect
-      all = hostsfile.ip_addresses.select { |ip_address| @filter.call(ip_address) }
+      all = (hostsfile.ip_addresses.select { |ip_address| @filter.call(ip_address) }).map(&:to_s)
       all
     end
 
