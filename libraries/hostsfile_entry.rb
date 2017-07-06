@@ -48,7 +48,8 @@ class Chef
   # provider
   class Provider::ZapHostsfileEntry < Provider::Zap
     def collect
-      all = (hostsfile.ip_addresses.select { |ip_address| @filter.call(ip_address) }).map(&:to_s)
+      all = (hostsfile.ip_addresses.select { |ip_address| @filter.call(ip_address.to_s) }).map(&:to_s)
+      puts "ALL: #{all}"
       all
     end
 
